@@ -9,4 +9,4 @@
 
 4) **circlize_plot.R** is an R script that reads the density of genes, the density of TEs, the coverage of the RNAseq, and the genomic position of candidate genes and make a circos plot with circlize package.
 
-5) **metabolic_gene_cluster.R** is an R script that takes the structural and functional annotation and makes plots of the genes present in the selected genomic coordinates.
+5) **metabolic_gene_cluster.R** is an R script that takes the structural and functional annotation and makes plots of the genes present in the selected genomic coordinates using the gggenes package.
