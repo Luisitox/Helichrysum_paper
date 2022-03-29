@@ -50,7 +50,7 @@ find . -regex ".*evm.out.gff3" -exec cat {} \; > EVM_PASA.gff3
 Load_Current_Gene_Annotations.dbi -c $ALIGN_CONFIG -g $GENOME_FASTA -P $EVMODELER_GFF
 perl Launch_PASA_pipeline.pl -c $ANNOT_CONFIG -A -g $GENOME_FASTA -t transcripts.fa.clean --CPU 10
 
-### UMI aware 3' Tran-seq data ###
+### UMI aware 3' Tran-seq data analysis ###
 ### extract UMIs from R2 files
 umi_tools extract --bc-pattern=NNNN --stdin=$R2_FASTQ--read2-in=$R1_FASTQ --stdout=$SAMPLE_UMI_FASTQ --read2-stdout
 ### trimming in two steps
