@@ -1,5 +1,5 @@
 # Helichrysum paper
-## Scripts and commands used to analyze the data of Helichrysum genome
+## Scripts and commands used to assemble and analyze Helichrysum genome
 
 1) **general_commands.sh** is a shell file including all the commands run to do the assembly and annotate the genome. It is a guideline of the parameters used at each stage and the full process is described in the Methods section of the paper.
 
