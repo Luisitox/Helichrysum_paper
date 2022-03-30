@@ -8,7 +8,7 @@ library(reshape2)
 library(seqinr)
 library(rhmmer)
 
-### 100 aa minimum
+### read blastp results obtained using as query the relevant enzymes
 blastp_OACs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_OACs_heli.txt")
 blastp_PTs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_PTs_heli.txt")
 blastp_TKSs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_TKSs_heli.txt")
