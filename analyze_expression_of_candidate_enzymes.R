@@ -9,11 +9,11 @@ library(seqinr)
 library(rhmmer)
 
 ### read blastp results obtained using as query the relevant enzymes
-blastp_OACs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_OACs_heli.txt")
-blastp_PTs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_PTs_heli.txt")
-blastp_TKSs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_TKSs_heli.txt")
-blastp_AAEs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_AAEs_heli.txt")
-blastp_BBEs <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_BBEs_heli.txt")
+blastp_OACs <- read.table("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_OACs_heli.txt")
+blastp_PTs <- read.table("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_PTs_heli.txt")
+blastp_TKSs <- read.table("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_TKSs_heli.txt")
+blastp_AAEs <- read.table("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_AAEs_heli.txt")
+blastp_BBEs <- read.table("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/blastp_BBEs_heli.txt")
 
 ### change the column names
 colnames(blastp_OACs) <- c("qseqid", "sseqid", "pident", "length", "qlen", "slen", "qcovs", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
@@ -30,7 +30,7 @@ blastp_all$gene_id <- apply(str_split_fixed(blastp_all$sseqid, "\\.", 4)[, 1:2],
 gene_ids_all_candidates <- unique(blastp_all[, c("gene_id", "source")])
 
 ### read the annotation table
-annotation_table <- fread(file = "/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/10_integration/Humb_PASA_v3_parsed.transcripts.fa_annotation_report.xls", na.strings = ".")
+annotation_table <- fread(file = "~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/10_integration/Humb_PASA_v3_parsed.transcripts.fa_annotation_report.xls", na.strings = ".")
 
 ### keep only entries with identified orfs
 annotation_table <- as.data.frame(annotation_table[!is.na(annotation_table$prot_id), ])
@@ -42,14 +42,14 @@ annotation_table <- annotation_table[, colSums(is.na(annotation_table)) < nrow(a
 colnames(annotation_table)[1] <- "gene_id"
 
 ### read the pfam data
-pfam_data <- read_domtblout("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/3_homology/3_hmmer_Pfam/3_hmmer_Pfam_ALL.txt")
+pfam_data <- read_domtblout("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/3_homology/3_hmmer_Pfam/3_hmmer_Pfam_ALL.txt")
 pfam_data <- pfam_data[, c("query_name", "domain_accession", "domain_name")]
 pfam_data <- aggregate(list(pfam_data$domain_accession, pfam_data$domain_name), by = list(pfam_data$query_name), toString)
 colnames(pfam_data) <- c("query_name", "domain_accession", "domain_name")
 annotation_table <- merge(annotation_table, pfam_data, by.x = "prot_id", by.y = "query_name", all.x = T)
 
 ### read the structural info
-gff_heli <- as.data.frame(readGFF("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
+gff_heli <- as.data.frame(readGFF("~/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
 gff_heli_genes <- gff_heli[gff_heli$type == "gene", ]
 gff_heli_genes <- gff_heli_genes[, c("seqid", "ID", "start", "end", "strand")]
 colnames(gff_heli_genes) <- c("scaffold", "gene_id", "start", "end", "strand")
@@ -60,7 +60,7 @@ genome_coordinates <- data.frame(gene_id = gff_heli_genes$gene_id,
 annotation_table <- merge(annotation_table, genome_coordinates, by = "gene_id", all.x = T)
 
 ### add the protein sequence
-proteins_fasta <- read.fasta(file = "/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/Humb_PASA_v3_parsed.transcripts.fa.transdecoder.pep", seqtype = "AA", as.string = T)
+proteins_fasta <- read.fasta(file = "~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/Humb_PASA_v3_parsed.transcripts.fa.transdecoder.pep", seqtype = "AA", as.string = T)
 proteins_fasta_df <- as.data.frame(unlist(proteins_fasta))
 proteins_fasta_df$ID <- rownames(proteins_fasta_df)
 colnames(proteins_fasta_df)[1] <- "protein_sequence"
@@ -69,7 +69,7 @@ annotation_table <- merge(annotation_table, proteins_fasta_df, by.x = "prot_id",
 annotation_table$protein_sequence <- as.character(annotation_table$protein_sequence)
 
 ### add the cds sequence
-cds_fasta <- read.fasta(file = "/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/Humb_PASA_v3_parsed.transcripts.fa.transdecoder.cds", seqtype = "DNA", as.string = T)
+cds_fasta <- read.fasta(file = "~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/Humb_PASA_v3_parsed.transcripts.fa.transdecoder.cds", seqtype = "DNA", as.string = T)
 cds_fasta_df <- as.data.frame(unlist(cds_fasta))
 cds_fasta_df$ID <- rownames(cds_fasta_df)
 colnames(cds_fasta_df)[1] <- "cds_sequence"
@@ -85,14 +85,14 @@ go_data_parsed$gene <- go_data$`gene_id`
 go_data_parsed_long <- melt(go_data_parsed, value.name = "term", id.vars = "gene")[, c("term", "gene")]
 
 ### read the trueseq counts table
-counts_trueseq <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/short_reads/counts_GFF_pasa_FINAL.txt", header = T)
+counts_trueseq <- read.table("~/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/short_reads/counts_GFF_pasa_FINAL.txt", header = T)
 
 ### remove redundant part of the colnames
 colnames(counts_trueseq) <- gsub("_STARAligned.sortedByCoord.out.bam", "", colnames(counts_trueseq), fixed = T)
 colnames(counts_trueseq)[7:ncol(counts_trueseq)] <- c("trueseq_youngleaf", "trueseq_oldleaf", "trueseq_stem", "trueseq_root", "trueseq_leafWOtrichomes")
 
 ### read the transeq counts table
-counts_transeq <- read.table("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/transeq/counts_deduped_GFF_pasa_FINAL.txt", header = T)
+counts_transeq <- read.table("~/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/transeq/counts_deduped_GFF_pasa_FINAL.txt", header = T)
 
 ### remove redundant part of the colnames
 colnames(counts_transeq) <- gsub("_UMI2Aligned.deduped.bam", "", colnames(counts_transeq), fixed = T)
@@ -120,23 +120,23 @@ annotation_table_with_counts$tomato_orth <- sapply(strsplit(annotation_table_wit
 annotation_table_with_counts$rice_orth <- sapply(strsplit(annotation_table_with_counts$rice_blastp_BLASTP, "^", fixed = T), `[`, 1)
 
 ### read and tidy fasta annotation
-cannabis <- as.data.frame(str_split_fixed(readLines(file("/home/labs/aharoni/luisdh/uniprot/GCF_900626175.1_cs10_protein.annot2", encoding = "utf-8")), "\t", 2))
+cannabis <- as.data.frame(str_split_fixed(readLines(file("~/uniprot/GCF_900626175.1_cs10_protein.annot2", encoding = "utf-8")), "\t", 2))
 cannabis$V1 <- gsub(">", "", cannabis$V1)
 colnames(cannabis) <- c("V1", "cannabis_annot")
 
-arabidopsis <- as.data.frame(str_split_fixed(readLines(file("/home/labs/aharoni/luisdh/uniprot/arabidopsis_UP000006548_3702.annot2", encoding = "utf-8")), "\t", 2))
+arabidopsis <- as.data.frame(str_split_fixed(readLines(file("~/uniprot/arabidopsis_UP000006548_3702.annot2", encoding = "utf-8")), "\t", 2))
 arabidopsis$V1 <- gsub(">", "", arabidopsis$V1)
 colnames(arabidopsis) <- c("V1", "arabidopsis_annot")
 
-sunflower <- as.data.frame(str_split_fixed(readLines(file("/home/labs/aharoni/luisdh/uniprot/sunflower_UP000215914_4232.annot2", encoding = "utf-8")), "\t", 2))
+sunflower <- as.data.frame(str_split_fixed(readLines(file("~/uniprot/sunflower_UP000215914_4232.annot2", encoding = "utf-8")), "\t", 2))
 sunflower$V1 <- gsub(">", "", sunflower$V1)
 colnames(sunflower) <- c("V1", "sunflower_annot")
 
-tomato <- as.data.frame(str_split_fixed(readLines(file("/home/labs/aharoni/luisdh/uniprot/tomato_UP000004994_4081.annot2", encoding = "utf-8")), "\t", 2))
+tomato <- as.data.frame(str_split_fixed(readLines(file("~/uniprot/tomato_UP000004994_4081.annot2", encoding = "utf-8")), "\t", 2))
 tomato$V1 <- gsub(">", "", tomato$V1)
 colnames(tomato) <- c("V1", "tomato_annot")
 
-rice <- as.data.frame(str_split_fixed(readLines(file("/home/labs/aharoni/luisdh/uniprot/rice_UP000059680_39947.annot2", encoding = "utf-8")), "\t", 2))
+rice <- as.data.frame(str_split_fixed(readLines(file("~/uniprot/rice_UP000059680_39947.annot2", encoding = "utf-8")), "\t", 2))
 rice$V1 <- gsub(">", "", rice$V1)
 colnames(rice) <- c("V1", "rice_annot")
 
@@ -240,5 +240,5 @@ give_me_coexpression(counts = counts_transeq,
                      dis_threshold = 0.6, 
                      annotation = annotation_table, 
                      number_of_analysis = 1,
-                     out_dir_base = "/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/coexpression/transeq_")
+                     out_dir_base = "~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/coexpression/transeq_")
 
