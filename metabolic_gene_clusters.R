@@ -4,7 +4,7 @@ library(rtracklayer)
 library(Cairo)
 library(openxlsx)
 
-gff_heli <- as.data.frame(readGFF("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
+gff_heli <- as.data.frame(readGFF("~/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
 
 gff_heli_genes <- gff_heli[gff_heli$type == "gene", ]
 
@@ -16,7 +16,7 @@ gff_heli_genes$strand <- gsub("+", 1, gff_heli_genes$strand, fixed = T)
 gff_heli_genes$strand <- gsub("-", -1, gff_heli_genes$strand, fixed = T)
 gff_heli_genes$strand <- as.numeric(gff_heli_genes$strand)
 
-annotation_table_with_counts <- read.xlsx("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/Humb_PASA_v3_parsed_functional_annotation_with_counts.xlsx", sheet = 1)
+annotation_table_with_counts <- read.xlsx("~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/Humb_PASA_v3_parsed_functional_annotation_with_counts.xlsx", sheet = 1)
 
 ### OLSs
 chromstart <- 133927125
@@ -64,7 +64,7 @@ dummies <- data.frame(scaffold_2 = unique(gff_heli_genes_subsetted$scaffold_2),
 
 gff_heli_genes_subsetted$class <- factor(gff_heli_genes_subsetted$class, levels = c("AP-1 complex subunit mu-2", "LRR receptor", "Myosin 9", "Protein of unknown function", "Ribonuclase H", "Sucrose phosphate synthase", "Transposon-related protein", "Type III PKS"))
 
-Cairo(file="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/clusters/chalcone_synthase_cluster_scaffold1_v3.png",
+Cairo(file="~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/clusters/chalcone_synthase_cluster_scaffold1_v3.png",
       type="png",
       units="cm", 
       width=30, 
@@ -139,7 +139,7 @@ dummies <- data.frame(scaffold_2 = unique(gff_heli_genes_subsetted$scaffold_2),
                       strand = -1,
                       class = "Myosin 9")
 
-Cairo(file="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/clusters/prenyltransferases_cluster_scaffold5.png",
+Cairo(file="~/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/cannabinoid_genes/clusters/prenyltransferases_cluster_scaffold5.png",
       type="png",
       units="cm", 
       width=30, 
