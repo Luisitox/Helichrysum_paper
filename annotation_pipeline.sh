@@ -14,20 +14,20 @@ module load hmmer
 
 ### PLEASE CHANGE THE FOLLOWING FILES ACCORDINGLY
 ### FOLDER OF THE ANNOTATION:
-DIR="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation"
+DIR="~/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation"
 
 ### TRANSCRIPT FILE
-FASTA_FILE="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/Humb_PASA_v3_parsed.transcripts.fa"
+FASTA_FILE="~/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/Humb_PASA_v3_parsed.transcripts.fa"
 
 grep '>' $FASTA_FILE | cut -d'>' -f2 | cut -d' ' -f1 > col2
 grep '>' $FASTA_FILE | cut -d'>' -f2 | cut -d' ' -f2 | sed 's/gene=//' > col1
 paste col1 col2 > /home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/gene_trans_map
 rm col*
 
-GENE_TRANS_FILE="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/gene_trans_map"
+GENE_TRANS_FILE="~/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/gene_trans_map"
 
 ### SPECIES TO USE FOR THE ANNOTATION
-SPECIES_FOR_BLAST="/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/species_for_blast.txt" ### this file has to be a plain list of the full path to the fasta files for annotation. Blastdb has to be present in the same folder.
+SPECIES_FOR_BLAST="~/pacbio_genome/hifiasm-HiC/protein_annotation/PASA5/annotation/species_for_blast.txt" ### this file has to be a plain list of the full path to the fasta files for annotation. Blastdb has to be present in the same folder.
 
 NAME=$(basename $FASTA_FILE)
 
