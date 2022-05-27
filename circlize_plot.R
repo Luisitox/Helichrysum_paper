@@ -6,18 +6,18 @@ library(stringr)
 
 
 ### read the selected contigs/scaffolds (small ones removed)
-contigs <- read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/selected_contigs.fai")
+contigs <- read.table("~/heli/data_circos/hifiasm-HiC/selected_contigs.fai")
 
 ### read the density of the different features to be plotted 
-genes <- read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/genes100K.bedg", col.names = c("chr", "start", "end", "value1"))
-TEs <-read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/TEs100K.bedg", col.names = c("chr", "start", "end", "value1"))
-True_seq_cov <- read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/TrueSeqCov.bedg", col.names = c("chr", "start", "end", "value1"))
-Tran_seq_cov <- read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/TranSeqCov.bedg", col.names = c("chr", "start", "end", "value1"))
+genes <- read.table("~/heli/data_circos/hifiasm-HiC/genes100K.bedg", col.names = c("chr", "start", "end", "value1"))
+TEs <-read.table("~/heli/data_circos/hifiasm-HiC/TEs100K.bedg", col.names = c("chr", "start", "end", "value1"))
+True_seq_cov <- read.table("~/heli/data_circos/hifiasm-HiC/TrueSeqCov.bedg", col.names = c("chr", "start", "end", "value1"))
+Tran_seq_cov <- read.table("~/heli/data_circos/hifiasm-HiC/TranSeqCov.bedg", col.names = c("chr", "start", "end", "value1"))
 
 ### read the position of relevant genes
-relevant_genes <- read.table("/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/relevant_genes.txt", header = T)
+relevant_genes <- read.table("~/heli/data_circos/hifiasm-HiC/relevant_genes.txt", header = T)
 
-gff_heli <- as.data.frame(readGFF("/home/labs/aharoni/luisdh/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
+gff_heli <- as.data.frame(readGFF("~/heli/pacbio_genome/hifiasm-HiC/mapping_to_assembly/softmasked/trinity_transcripts/PASA5/Humb_PASA_v3_parsed.gff3"))
 gff_heli_genes <- gff_heli[gff_heli$type == "gene", ]
 gff_heli_genes <- gff_heli_genes[, c("seqid", "ID", "start", "end", "strand")]
 colnames(gff_heli_genes) <- c("scaffold", "gene_ID", "start", "end", "strand")
@@ -41,7 +41,7 @@ chromosome_lenghts <- matrix(c(rep(0, nrow(contigs)), contigs$V2), ncol=2)
 chromosome_lenghts <- chromosome_lenghts[order(chromosome_lenghts[, 2], decreasing = T), ]
 chromosome_names <- paste0("sc", seq(1:nrow(chromosome_lenghts)))
 
-png(filename="/home/labs/aharoni/luisdh/heli/data_circos/hifiasm-HiC/circlize_v2.png", 
+png(filename="~/heli/data_circos/hifiasm-HiC/circlize_v2.png", 
     type="cairo",
     units="cm", 
     width=30, 
